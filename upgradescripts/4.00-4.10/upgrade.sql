@@ -2006,6 +2006,21 @@ set @resources='
   <LocaleResource Name="Admin.Configuration.Settings.CustomerUser.ShowCustomersLocation.Hint">
     <Value>A value indicating whether customer''s location is shown.</Value>
   </LocaleResource>  
+  <LocaleResource Name="Account.UserAgreement">
+    <Value>User agreement</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Core.Domain.Orders.ShoppingCartType.ShoppingCart">
+    <Value>Shopping Cart</Value>
+  </LocaleResource>
+  <LocaleResource Name="Enums.Nop.Core.Domain.Orders.ShoppingCartType.Wishlist">
+    <Value>Wishlist</Value>
+  </LocaleResource> 
+  <LocaleResource Name="Admin.SEO.SeName.MaxLengthValidation">
+    <Value>Max length of search name is {0} chars</Value>
+  </LocaleResource>   
+  <LocaleResource Name="Admin.Orders.OrderNotes.Fields.Note.Validation">
+    <Value>Order note can not be empty.</Value>
+  </LocaleResource>  
 </Language>
 '
 
@@ -2708,7 +2723,7 @@ GO
 --rename table
 IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ShippingByWeight]') and OBJECTPROPERTY(object_id, N'IsUserTable') = 1)
 BEGIN
-    EXEC sp_RENAME '[dbo].[ShippingByWeight]', 'ShippingByWeightByTotal'
+    EXEC sp_RENAME '[dbo].[ShippingByWeight]', 'ShippingByWeightByTotalRecord'
 END
 GO
 
@@ -3924,5 +3939,12 @@ IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [Name] = N'commonsettings.staticfil
 BEGIN
 	INSERT [Setting] ([Name], [Value], [StoreId])
 	VALUES (N'commonsettings.staticfilescachecontrol', N'public,max-age=604800', 0)
+END
+GO
+
+--rename table
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ShippingByWeightByTotal]') and OBJECTPROPERTY(object_id, N'IsUserTable') = 1)
+BEGIN
+    EXEC sp_RENAME '[dbo].[ShippingByWeightByTotal]', 'ShippingByWeightByTotalRecord'
 END
 GO
