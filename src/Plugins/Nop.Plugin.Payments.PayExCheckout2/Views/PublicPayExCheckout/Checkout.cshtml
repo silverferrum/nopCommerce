@@ -1,0 +1,87 @@
+﻿@model CheckoutModel
+@using Nop.Core
+@using Nop.Plugin.Payments.PayExCheckout2.Models
+@inject IWebHelper webHelper
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-checkout-page");
+}
+
+<h1>PayEx Checkout v2</h1>
+
+@if (Model?.ScriptHref == null)
+{
+    <div style="padding:15px; margin-top:15px; background-color:#fdd; color: #800;">Error occured with payment order</div>    
+}
+else
+{
+        <div id="payexCheckout"></div>
+        <script src="@Model.ScriptHref"></script>
+        <script language="javascript">
+            payex.hostedView.paymentMenu({
+                container: 'payexCheckout',
+                culture: '@Model.Language',
+                onPaymentCompleted: function(paymentCompletedEvent) {                    
+                    console.log(paymentCompletedEvent);
+                    location.href = "@Url.RouteUrl("PayExCheckout2.OnPaymentCompleted", new { paymentOrderId = Model.PaymentOrderId })";
+                },
+                onPaymentFailed: function(paymentFailedEvent) {
+                    console.log(paymentFailedEvent);
+                },
+                onPaymentCreated: function(paymentCreatedEvent) {
+                    console.log(paymentCreatedEvent);
+                },
+                onPaymentToS: function(paymentToSEvent) {
+                    console.log(paymentToSEvent);
+                },
+                onPaymentMenuInstrumentSelected: function(paymentMenuInstrumentSelectedEvent) {
+                    console.log(paymentMenuInstrumentSelectedEvent);
+                },
+                onError: function(error) {
+                    console.error(error);
+                },
+            }).open();
+        </script>
+
+        @*<div id="payexCheckout"></div>
+        <script src="https://ecom.externalintegration.payex.com/consumers/core/scripts/client/px.consumer.client.js?token=7e380fbb3196ea76cc45814c1d99d59b66db918ce2131b61f585645eff364871"></script>
+        <script language="javascript">
+                payex.hostedView.consumer({
+                    container: 'checkin',
+                    culture: 'nb-NO',
+                    onConsumerIdentified: function(consumerIdentifiedEvent) {
+                        var request = new XMLHttpRequest();
+                        request.addEventListener('load', function() {
+                            response = JSON.parse(this.responseText);
+
+                            var script = document.createElement('script');
+                            // This assumses the operations from the response of the POST of the
+                            // payment order is returned verbatim from the server to the Ajax:
+                            var operation = response.operations.find(o => o.rel === 'view-paymentorder');
+                            script.setAttribute('src', operation.href);
+                            script.onload = function() {
+                                // Remove the Consumer Hosted View from the DOM
+                                var iframe = document.getElementsByTagName('iframe')[0];
+                                iframe.parentElement.removeChild(iframe);
+
+                                // When the 'view-paymentorder' script is loaded, we can initialize the payment
+                                // menu inside our 'checkin' container.
+                                payex.hostedView.paymentMenu({
+                                    container: 'checkin',
+                                    culture: 'nb-NO'
+                                }).open();
+                            };
+                            var head = document.getElementsByTagName('head')[0];
+                            head.appendChild(script);
+                        });
+                        request.open('POST', window.location.href, true);
+                        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                        request.send(JSON.stringify(consumerEvent));
+                    }
+                }).open();
+        </script>*@
+}

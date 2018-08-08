@@ -1,0 +1,34 @@
+﻿@model CheckinModel
+@using Nop.Core
+@using Nop.Plugin.Payments.PayExCheckout2.Models
+@inject IWebHelper webHelper
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Checkout").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-checkout-page");
+    
+}
+
+<h1>PayEx Checkout v2</h1>
+
+@if (Model?.ScriptHref == null)
+{
+    <div style="padding:15px; margin-top:15px; background-color:#fdd; color: #800;">Error occured with initialization consumer session</div>    
+}
+else
+{
+        <div id="payexCheckin"></div>
+        <script src="@Model.ScriptHref"></script>
+        <script language="javascript">
+            payex.hostedView.consumer({
+                container: "payexCheckin",
+                culture: '@Model.Language',
+                onConsumerIdentified: function (e) {
+                    location.href = "@Url.RouteUrl("PayExCheckout2.Checkout")/" + e.consumerProfileRef;
+                }
+            }).open();
+        </script>
+}

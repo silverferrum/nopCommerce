@@ -1,0 +1,236 @@
+﻿@model Nop.Plugin.Payments.PayExCheckout2.Models.ConfigurationModel
+@inject Nop.Core.IWorkContext _workContext
+@{
+    Layout = "_ConfigurePlugin";
+    string currentCurrencyCode = _workContext.WorkingCurrency.CurrencyCode;
+}
+
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+@if (!string.Equals(currentCurrencyCode, "NOK") && !string.Equals(currentCurrencyCode, "SEK"))
+{
+<div class="alert alert-warning" style="margin-bottom:10px;">
+    Current working currency is: @_workContext.WorkingCurrency.Name (@_workContext.WorkingCurrency.CurrencyCode)<br />
+    But PayEx Checkout works only with Norwegian Krone (NOK) and Swedish Krona (SEK).<br />
+    Be sure to <a href="/Admin/Currency/List">set primary store currency</a> to one of these.
+</div>
+}
+
+<form asp-controller="PayExCheckout" asp-action="Configure" method="post">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="ApiEndPoint_OverrideForStore" asp-input="ApiEndPoint" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="ApiEndPointValues" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="ApiEndPoint" asp-items="Model.ApiEndPointValues" />
+                        <span asp-validation-for="ApiEndPoint"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="Language_OverrideForStore" asp-input="Language" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="LanguageValues" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="Language" asp-items="Model.LanguageValues" />
+                        <span asp-validation-for="Language"></span>
+                    </div>
+                </div>
+
+                <h4>Merchant Settings</h4>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="PayeeId_OverrideForStore" asp-input="PayeeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="PayeeId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="PayeeId" />
+                        <span asp-validation-for="PayeeId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @*<nop-override-store-checkbox asp-for="PayeeId_OverrideForStore" asp-input="PayeeId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />*@
+                        <nop-label asp-for="PayeeName" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="PayeeName" />
+                        <span asp-validation-for="PayeeName"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="MerchantToken_OverrideForStore" asp-input="MerchantToken" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="MerchantToken" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="MerchantToken" />
+                        <span asp-validation-for="MerchantToken"></span>
+                    </div>
+                </div>
+
+                <h4>Urls Settings</h4>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="Urls_completeUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Urls_completeUrl" />
+                        <span asp-validation-for="Urls_completeUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="Urls_cancelUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Urls_cancelUrl" />
+                        <span asp-validation-for="Urls_cancelUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="Urls_callbackUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Urls_callbackUrl" asp-disabled="True" />
+                        <span asp-validation-for="Urls_callbackUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="Urls_termsOfServiceUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Urls_termsOfServiceUrl" />
+                        <span asp-validation-for="Urls_termsOfServiceUrl"></span>
+                    </div>
+                </div>
+
+                @*<h4>Fees Settings</h4>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="Fee_Invoice" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Fee_Invoice" min="0" step="0.01" />
+                        <span asp-validation-for="Fee_Invoice"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="Fee_CampaignInvoice" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Fee_CampaignInvoice" />
+                        <span asp-validation-for="Fee_CampaignInvoice"></span>
+                    </div>
+                </div>*@
+
+                <h4>Credit Card Settings</h4>
+                <div class="form-group">
+                    <div class="col-md-3">                        
+                        <nop-label asp-for="CreditCard_SettingsEnabled" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CreditCard_SettingsEnabled" />
+                        <span asp-validation-for="CreditCard_SettingsEnabled"></span>
+                    </div>
+                </div>
+                <div >
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_no3DSecure" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_no3DSecure" />
+                            <span asp-validation-for="CreditCard_no3DSecure"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_mailOrderTelephoneOrder" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_mailOrderTelephoneOrder" />
+                            <span asp-validation-for="CreditCard_mailOrderTelephoneOrder"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectCardNot3DSecureEnrolled" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectCardNot3DSecureEnrolled" />
+                            <span asp-validation-for="CreditCard_rejectCardNot3DSecureEnrolled"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectDebitCards" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectDebitCards" />
+                            <span asp-validation-for="CreditCard_rejectDebitCards"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectCreditCards" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectCreditCards" />
+                            <span asp-validation-for="CreditCard_rejectCreditCards"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectConsumerCards" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectConsumerCards" />
+                            <span asp-validation-for="CreditCard_rejectConsumerCards"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectCorporateCards" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectCorporateCards" />
+                            <span asp-validation-for="CreditCard_rejectCorporateCards"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectAuthenticationStatusU" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectAuthenticationStatusU" />
+                            <span asp-validation-for="CreditCard_rejectAuthenticationStatusU"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CreditCard_rejectAuthenticationStatusA" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CreditCard_rejectAuthenticationStatusA" />
+                            <span asp-validation-for="CreditCard_rejectAuthenticationStatusA"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-primary" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

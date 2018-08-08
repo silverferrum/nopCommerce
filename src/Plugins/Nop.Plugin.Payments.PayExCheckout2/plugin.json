@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "PayEx Checkout v2",
+  "SystemName": "Payments.PayExCheckout2",
+  "Version": "1.00.20180807.214633",
+  "SupportedVersions": [ "4.10", "4.20" ],
+  "Author": "Silver Ferrum",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.PayExCheckout2.dll",
+  "Description": "This plugin replaces NopCommerce checkout with PayEx Checkout v2 iframe"
+}
